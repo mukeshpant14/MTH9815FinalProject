@@ -3,7 +3,6 @@
 
 #include "generator.hpp"
 #include "quote.hpp"
-#include <boost/log/trivial.hpp>
 
 using namespace std;
 
@@ -37,7 +36,6 @@ public:
 		addHeader("productId,bid,ask");
 
 		int noOfTicksInRange = endQuote.noOfTicks() - startQuote.noOfTicks();
-		Quote q = startQuote;
 		for (auto it = productIds.cbegin(); it != productIds.cend(); ++it)
 		{
 			for (int i = 0; i < size; i++) {
@@ -52,7 +50,7 @@ public:
 			};
 		};
 
-		BOOST_LOG_TRIVIAL(info) << "Generated price data. File " << this->getFileName();
+		std::cout << "Generated price data. File " << this->getFileName() << std::endl;
 	}
 };
 

@@ -3,12 +3,12 @@
 
 #include <string>
 #include <map>
-#include <boost/log/trivial.hpp>
 
 #include "soa.hpp"
 #include "marketdataservice.hpp"
 #include "executionorder.hpp"
 #include "baseservice.hpp"
+#include "AlgoExecution.hpp"
 
 /**
 * Service for executing orders on an exchange.

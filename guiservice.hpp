@@ -21,6 +21,7 @@ public:
 
 	~GuiService()
 	{
+		this->file.flush();
 		this->file.close();
 	}
 
@@ -40,6 +41,7 @@ public:
 	void addMessage(string message)
 	{
 		this->file << message << "\n";
+		this->file.flush();
 	}
 
 	static GuiService* Instance()

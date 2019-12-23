@@ -7,6 +7,7 @@
 #include "algostream.hpp"
 #include "products.hpp"
 #include "executionorder.hpp"
+#include "AlgoExecution.hpp"
 
 using namespace std;
 

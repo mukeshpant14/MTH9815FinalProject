@@ -52,8 +52,10 @@ public:
 		return positions[book];
 	}
 
+	map<string, long> getPositions() const { return this->positions; }
+
 	// Get the aggregate position
-	long GetAggregatePosition()
+	long GetAggregatePosition() const
 	{
 		long sum = 0;
 		for (auto it = positions.begin(); it != positions.end(); ++it)

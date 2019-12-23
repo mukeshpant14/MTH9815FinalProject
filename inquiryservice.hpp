@@ -78,7 +78,7 @@ public:
 		}
 		else if (data.GetState() == InquiryState::DONE)
 		{
-			BOOST_LOG_TRIVIAL(info) << "Inquiry " << data.GetInquiryId() << " is DONE";
+			std::cout << "Inquiry " << data.GetInquiryId() << " is DONE\n";
 		}
 	};
 

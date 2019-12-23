@@ -39,7 +39,7 @@ public:
 
 		// go over each bid and ask order and check if spread if 1/128
 		vector<AlgoExecution<Bond>> algoExecutionOrders;
-		for (int i = 0; i < orderBook.GetBidStack().size(); i++)
+		for (unsigned int i = 0; i < orderBook.GetBidStack().size(); i++)
 		{
 			Order bid = orderBook.GetBidStack().at(i);
 			Order ask = orderBook.GetOfferStack().at(i);

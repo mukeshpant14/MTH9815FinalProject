@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <boost/log/trivial.hpp>
 #include "generator.hpp"
 #include "quote.hpp"
 
@@ -46,7 +45,7 @@ public:
 			}
 		};
 
-		BOOST_LOG_TRIVIAL(info) << "Generated trade data. File " << this->getFileName();
+		std::cout << "Generated trade data. File " << this->getFileName() << std::endl;
 	}
 };
 

@@ -1,10 +1,10 @@
 #ifndef SOCKETCONNECTOR_HPP
 #define SOCKETCONNECTOR_HPP
 
+#include <string>
 #include <boost/asio.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/log/trivial.hpp>
 #include <iostream>
 #include <vector>
 #include "soa.hpp"
@@ -14,6 +14,7 @@ using namespace boost::asio;
 using namespace std;
 
 string ADDRESS = "127.0.0.1";
+//string ADDRESS = "localhost";
 
 template <typename T>
 class SocketConnector : public Connector<T>
@@ -23,16 +24,17 @@ public:
 	{
 		this->port = _port;
 		this->ioservice = new io_service();
-		tcp::endpoint endpoint(address::from_string("127.0.0.1"), this->port);
+		tcp::endpoint endpoint(address::from_string(ADDRESS), this->port);
+		//tcp::endpoint endpoint(tcp::v4(), this->port);
 		this->socket = new tcp::socket(*ioservice);
 	}
 
-	virtual ~SocketConnector()
+	/*virtual ~SocketConnector()
 	{
 		this->close();
 		delete this->socket;
-		BOOST_LOG_TRIVIAL(info) << "Socket Closed on port " << this->port;
-	}
+		std::cout << "Socket Closed on port " << this->port << std::endl;
+	}*/
 
 	void close() { this->socket->close(); }
 
@@ -53,13 +55,15 @@ public:
 	SubscribeSocketConnector(int _port) : SocketConnector<T>(_port) 
 	{
 		tcp::endpoint endpoint(address::from_string(ADDRESS), _port);
+		//tcp::endpoint endpoint(tcp::v4(), _port);
 		tcp::acceptor acceptor(*this->ioservice, endpoint);
+		std::cout << "[Client] Trying to accept connection " << this->port << std::endl;
 		acceptor.accept(*this->socket);
-		BOOST_LOG_TRIVIAL(info) << "[Client] Connection successful. Socket: " << ADDRESS << "," << _port;
+		std::cout << "[Client] Connection successful. Socket: " << ADDRESS << "," << _port << std::endl;
 	}
 
-	~SubscribeSocketConnector() {}
-
+	/*~SubscribeSocketConnector() {}
+*/
 	// Publish data to the Connector
 	void Publish(T &data) { /*no op*/ };
 
@@ -91,7 +95,7 @@ public:
 			if (error == boost::asio::error::eof) break;
 			if (error) 
 			{
-				BOOST_LOG_TRIVIAL(error) << "Status: " << error.message();
+				std::cout << "Status: " << error.message() << std::endl;
 				break;
 			};
 		};
@@ -107,9 +111,11 @@ class PublishSocketConnector : public SocketConnector<T>
 public:
 	PublishSocketConnector(int _port) : SocketConnector<T>(_port) 
 	{
-		tcp::endpoint endpoint(address::from_string("127.0.0.1"), this->port);
+		tcp::endpoint endpoint(address::from_string(ADDRESS), this->port);
+		//tcp::endpoint endpoint(tcp::v4(), this->port);
+		std::cout << "[Server] Trying to connect " << this->port << std::endl;
 		this->socket->connect(endpoint);
-		BOOST_LOG_TRIVIAL(info) << "[Server] Connection established";
+		std::cout << "[Server] Connection established" << this->port << std::endl;
 	}
 
 	void Subscribe() { /*no op */}  // may be throw?

@@ -1,7 +1,6 @@
 #ifndef MARKETDATAGENERATOR_HPP
 #define MARKETDATAGENERATOR_HPP
 
-#include <boost/log/trivial.hpp>
 #include "generator.hpp"
 #include "quote.hpp"
 
@@ -34,7 +33,6 @@ public:
 			quantities.push_back((i + 1) * 10);
 		
 		int noOfTicksInRange = endQuote.noOfTicks() - startQuote.noOfTicks();
-		Quote q = startQuote;
 		for (auto it = productIds.cbegin(); it != productIds.cend(); ++it)
 		{
 			for (auto qit = quantities.cbegin(); qit != quantities.cend(); ++qit)
@@ -53,7 +51,7 @@ public:
 			};
 		};
 
-		BOOST_LOG_TRIVIAL(info) << "Generated market data. File " << this->getFileName();
+		std::cout << "Generated market data. File " << this->getFileName() << std::endl;
 	}
 };
 

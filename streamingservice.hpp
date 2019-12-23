@@ -69,7 +69,8 @@ public:
 	// Listener callback to process an add event to the Service
 	void ProcessAdd(AlgoStream<Bond> &data)
 	{
-		this->service->PublishPrice(data.getPriceStream());
+		PriceStream<Bond> priceStream = data.getPriceStream();
+		this->service->PublishPrice(priceStream);
 	};
 
 	// Listener callback to process a remove event to the Service

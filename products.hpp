@@ -111,7 +111,7 @@ public:
 		return Product::toString() + "," + ticker; // TODO
 	}
 
-	int GetTenor() { return this->tenor; }
+	int GetTenor() const { return this->tenor; }
 
 private:
 	friend class boost::serialization::access;

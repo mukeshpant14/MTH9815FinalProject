@@ -3,6 +3,7 @@
 
 #include "SocketConnector.hpp"
 #include "trade.hpp"
+#include "quote.hpp"
 
 class TradeSocketConnector : public ServiceSubscribeSocketConnector<string, Trade<Bond>>
 {

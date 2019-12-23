@@ -21,7 +21,6 @@ public:
 		if (vec[0] == "CUSIP") // if header line
 			return NULL;
 
-		date issueDate = date_from_iso_string(vec[2]);
 		date maturityDate = date_from_iso_string(vec[3]);
 		float coupon = stof(vec[1]);
 

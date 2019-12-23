@@ -1,8 +1,9 @@
 #include <iostream>
+
+#include <iostream>
 #include <thread>
 #include <boost/thread.hpp>
-#include <boost/log/trivial.hpp>
-
+#include <boost/chrono.hpp>
 #include "PriceGenerator.hpp"
 #include "bondproductgenerator.hpp"
 #include "FileReaderProcess.hpp"
@@ -32,14 +33,21 @@
 #include "inquirysocketconnector.hpp"
 #include "inquiryservice.hpp"
 #include "guiservice.hpp"
+#include "historicaldataservice.hpp"
 
 void initializeDataProcess()
 {
+	boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	FileReaderProcess<string> p1(new PublishSocketConnector<string>(5100));
+	boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	FileReaderProcess<string> p2(new PublishSocketConnector<string>(5000));
+	boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	FileReaderProcess<string> p3(new PublishSocketConnector<string>(5200));
+	boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	FileReaderProcess<string> p4(new PublishSocketConnector<string>(5300));
+	boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	FileReaderProcess<string> p5(new PublishSocketConnector<string>(5400));
+	boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	
 	p1.readData("bonds.txt");
 	p2.readData("prices.txt");
@@ -65,6 +73,7 @@ void initializeServices()
 	Service<string, Bond>* bondProductService = BondProductService::Instance();
 	// data connector
 	BondProductSocketConnector bondDataConnector(5100, bondProductService);
+
 
 	// ------------ Price Data ---------------- 
 	PricingService* pricingService = PricingService::Instance();
@@ -121,6 +130,16 @@ void initializeServices()
 	BondInquiryServiceListener listener(&inquiryConnector);
 	bondInquiryService->AddListener(&listener);
 
+	// ------------ Historical Services --------------
+	// bond position
+	BondPositionHistoricalDataService* bondPositionHistoricalService = new BondPositionHistoricalDataService();
+	HistoricalDataServiceListener<Position<Bond>> bondPositionHistoricalServiceListener(bondPositionHistoricalService);
+	bondPositionService->AddListener(&bondPositionHistoricalServiceListener);
+	// bond risk
+	BondRiskHistoricalDataService* bondRiskHistoricalService = new BondRiskHistoricalDataService();
+	HistoricalDataServiceListener<PV01<Bond>> bondRiskHistoricalServiceListener(bondRiskHistoricalService);
+	bondRiskService->AddListener(&bondRiskHistoricalServiceListener);
+
 	// invoke subscribe on all connectors 
 	bondDataConnector.Subscribe();
 	priceDataConnector.Subscribe();
@@ -154,12 +173,12 @@ void generateData()
 	InquiryDataGenerator inquiryDataGenerator;
 	inquiryDataGenerator.generate();
 
-	BOOST_LOG_TRIVIAL(info) << "data generation completed";
+	std::cout << "data generation completed\n";
 }
 
 void tradingSystem()
 {
-	BOOST_LOG_TRIVIAL(info) << "............ trading system is starting ...........";
+	std::cout << "............ trading system is starting ...........\n";
 
 	generateData();
 
@@ -169,7 +188,7 @@ void tradingSystem()
 	tg.create_thread(initializeDataProcess);
 	tg.join_all();
 
-	BOOST_LOG_TRIVIAL(info) << "............ trading system is shutting down ...........";
+	std::cout << "............ trading system is shutting down ...........\n";
 }
 
 int main()

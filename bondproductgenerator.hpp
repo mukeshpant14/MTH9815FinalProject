@@ -2,7 +2,6 @@
 #define BONDPRODUCTGENERATOR_HPP
 
 #include "generator.hpp"
-#include <boost/log/trivial.hpp>
 
 using namespace std;
 
@@ -21,7 +20,7 @@ public:
 		addRow("912828YS3,1.750,20191115,20291115,T,10"); 
 		addRow("912810SK5,2.375,20191115,20491115,T,30"); 
 
-		BOOST_LOG_TRIVIAL(info) << "Generated bond data. File " << this->getFileName();
+		std::cout << "Generated bond data. File " << this->getFileName() << std::endl;
 	}
 };
 

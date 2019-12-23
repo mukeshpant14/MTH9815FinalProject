@@ -23,7 +23,7 @@ public:
 	// The callback that a Connector should invoke for any new or updated data
 	void OnMessage(Price<Bond>& data)
 	{
-		Bond& product = dynamic_cast<Bond&>(data.GetProduct());
+		Bond product = data.GetProduct();
 		string productId = product.GetProductId();
 		priceMap.emplace(productId, data);
 		this->callListeners(data, Action::ADD);

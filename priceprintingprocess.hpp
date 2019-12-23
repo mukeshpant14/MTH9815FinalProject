@@ -1,7 +1,6 @@
 #ifndef PRICEPRINTINGPROCESS_HPP
 #define PRICEPRINTINGPROCESS_HPP
 
-#include <boost/log/trivial.hpp>
 #include "products.hpp"
 #include "pricestream.hpp"
 #include "SocketConnector.hpp"
@@ -14,7 +13,7 @@ public:
 	void print(PriceStream<Bond> priceStream)
 	{
 		if (++printCount <= MAX_PRINT_COUNT)
-			BOOST_LOG_TRIVIAL(info) << "[PricePrintingProcess] : " << priceStream.toString();
+			std::cout << "[PricePrintingProcess] : " << priceStream.toString() << std::endl;
 	}
 private:
 	int printCount = 0; // 

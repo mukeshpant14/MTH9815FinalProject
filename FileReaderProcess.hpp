@@ -5,7 +5,6 @@
 #include <string>
 #include <fstream>
 #include "boost/asio.hpp"
-#include "boost/log/trivial.hpp"
 #include "soa.hpp"
 
 using namespace boost::asio::ip;
@@ -32,7 +31,7 @@ public:
 		}
 
 		this->connector->close();
-		BOOST_LOG_TRIVIAL(info) << "[Server] Read records and sent to socket";
+		std::cout << "[Server] Read records and sent to socket" << std::endl;
 	};
 
 private:

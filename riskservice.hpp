@@ -119,7 +119,7 @@ protected:
 	map<string, PV01<T>> pvMap;
 };
 
-class BondRiskService : RiskService<Bond>
+class BondRiskService : public RiskService<Bond>
 {
 public:
 	void AddPosition(Position<Bond>& position)
@@ -129,6 +129,7 @@ public:
 		PV01<Bond> pv01(position.GetProduct(), pv01v, quantity);
 		pvMap.emplace(position.GetProduct().GetProductId(), pv01);
 
+		this->callListeners(pv01, Action::ADD);
 		this->printMessage("Added position in BondRiskService --> " + position.GetProduct().GetProductId());
 	}
 

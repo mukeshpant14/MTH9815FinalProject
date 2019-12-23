@@ -3,10 +3,8 @@
 
 #include <string>
 #include "soa.hpp"
-#include <boost/log/trivial.hpp>
 
 using namespace std;
-using namespace boost::log::trivial;
 
 enum Action {ADD, UPDATE};
 
@@ -43,7 +41,7 @@ public:
 	void printMessage(string message)
 	{
 		if(++printCount <= MAX_PRINT_COUNT)
-			BOOST_LOG_TRIVIAL(info) << message;
+			std::cout << message << std::endl;
 	}
 private:
 	vector<ServiceListener<T>*> listeners;

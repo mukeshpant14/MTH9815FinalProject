@@ -16,14 +16,8 @@ class Price
 {
 public:
 	// ctor for a price
-	//Price(T &_product, Quote _bid, Quote _ask) : product(_product), bid(_bid), ask(_ask) {}
-	Price(T &_product, Quote _bid, Quote _ask) {
-		product = _product;
-		bid = _bid;
-		ask = _ask;
-	}
-
-	Price() : product(T()), bid(Quote()), ask(Quote()) {}
+	Price(T &_product, Quote _bid, Quote _ask) : product(_product), bid(_bid), ask(_ask) {}
+	Price() {}
 
 	// assignment
 	const Price<T>& operator=(const Price<T>& other)
@@ -35,7 +29,7 @@ public:
 	}
 
 	// Get the product
-	T& GetProduct() const { return product; }
+	T GetProduct() const { return product; }
 
 	// Get the mid price
 	Quote GetBid() const { return bid; }
@@ -44,7 +38,7 @@ public:
 	Quote GetAsk() const { return ask; }
 
 private:
-	T& product = T();
+	T product;
 	Quote bid;
 	Quote ask;
 };
