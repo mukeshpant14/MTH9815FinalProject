@@ -192,7 +192,14 @@ void tradingSystem()
 {
 	std::cout << "............ trading system is starting ...........\n";
 
-	generateData();
+	bool shouldRegenerateData = true;
+	if (shouldRegenerateData)
+	{
+		std::cout << "Generating data...\n";
+		generateData();
+	}
+	else
+		std::cout << "Skipping data generation. Using already generated data...\n";
 
 	boost::thread_group tg;
 	tg.create_thread(initializeOutputProcess);

@@ -31,7 +31,7 @@ public:
 		}
 
 		this->connector->close();
-		std::cout << "[Server] Read records and sent to socket" << std::endl;
+		std::cout << "[Server] Read records and sent to socket. File - " << fileName << std::endl;
 	};
 
 private:

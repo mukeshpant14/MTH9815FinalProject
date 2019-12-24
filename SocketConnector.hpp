@@ -68,10 +68,14 @@ public:
 	void Publish(T &data) { /*no op*/ };
 
 	virtual void onData(T& data) = 0;
+	
+	void onDataComplete() {};
 
 	// read data from socket
 	void Subscribe()
 	{
+		this->processedRecords = 0;
+		int batch = 1;
 		while (true) {
 			boost::system::error_code error;
 			read(*this->socket, boost::asio::buffer(this->inbound_header_), error);
@@ -92,6 +96,14 @@ public:
 
 			this->onData(data);
 			
+			// print some message to show how many records are processed
+			++processedRecords;
+			if ((processedRecords / (500000 * batch)) >= 1)
+			{
+				++batch;
+				std::cout << "Processed : " << processedRecords << " records\n";
+			}
+
 			if (error == boost::asio::error::eof) break;
 			if (error) 
 			{
@@ -99,10 +111,14 @@ public:
 				break;
 			};
 		};
+
+		this->onDataComplete();
 	}
 
 private:
 	std::vector<char> inbound_data_; 	/// Holds the inbound data.
+
+	long processedRecords;
 };
 
 template <typename T>

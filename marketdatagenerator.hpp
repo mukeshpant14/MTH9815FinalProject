@@ -21,7 +21,7 @@ public:
 		securities.push_back("912828YS3");
 		securities.push_back("912810SK5");
 
-		this->generateMarketData(securities, start, end, 2, 1000);
+		this->generateMarketData(securities, start, end, 2, 10000);
 	}
 
 	void generateMarketData(vector<string> productIds, Quote startQuote, Quote endQuote, int bidAskSpreadIncrementInTick, int size)

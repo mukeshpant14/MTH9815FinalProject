@@ -120,10 +120,10 @@ public:
 	const T& GetProduct() const { return this->product; }
 
 	// Get the bid stack
-	const vector<Order>& GetBidStack() const { return this->bidStack; }
+	vector<Order>& GetBidStack() { return this->bidStack; }
 
 	// Get the offer stack
-	const vector<Order>& GetOfferStack() const { return this->offerStack; }
+	vector<Order>& GetOfferStack() { return this->offerStack; }
 
 private:
 	T product;

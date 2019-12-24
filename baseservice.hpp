@@ -29,6 +29,7 @@ public:
 	{
 		for (auto it = listeners.begin(); it != listeners.cend(); ++it)
 		{
+
 			T d(data);
 			if (action == Action::ADD)
 				(*it)->ProcessAdd(d);

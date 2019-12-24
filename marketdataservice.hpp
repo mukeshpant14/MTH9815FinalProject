@@ -41,15 +41,8 @@ public:
 		}
 		else
 		{
-			OrderBook<Bond> currOrderBook = this->orderBookMap[productId];
-			vector<Order> bidStack = currOrderBook.GetBidStack();
-			bidStack.insert(bidStack.end(), data.GetBidStack().begin(), data.GetBidStack().end());
-
-			vector<Order> offerStack = currOrderBook.GetOfferStack();
-			offerStack.insert(offerStack.end(), data.GetOfferStack().begin(), data.GetOfferStack().end());
-
-			OrderBook<Bond> updatedOrderBook(currOrderBook.GetProduct(), bidStack, offerStack);
-			this->orderBookMap[productId] = updatedOrderBook;
+			this->orderBookMap[productId].GetBidStack().push_back(data.GetBidStack().at(0));
+			this->orderBookMap[productId].GetOfferStack().push_back(data.GetOfferStack().at(0)); 
 		}
 
 		this->printMessage("Added order to order book in BondMarketDataService --> " + productId);

@@ -23,7 +23,7 @@ public:
 		securities.push_back("912828YS3");
 		securities.push_back("912810SK5");
 
-		this->generatePriceData(securities, start, end, 2, 1000);
+		this->generatePriceData(securities, start, end, 2, 10000);
 	}
 	/**
 	* productId id of the product
@@ -36,10 +36,13 @@ public:
 		addHeader("productId,bid,ask");
 
 		int noOfTicksInRange = endQuote.noOfTicks() - startQuote.noOfTicks();
+		
 		for (auto it = productIds.cbegin(); it != productIds.cend(); ++it)
 		{
+			bool direction = true; // true == increasing, false == descresing
+			int tickSize = 1;
 			for (int i = 0; i < size; i++) {
-				int tickSize = rand() % noOfTicksInRange;
+				//int tickSize = rand() % noOfTicksInRange;
 				Quote bid = startQuote.addTick(tickSize);
 
 				// bid size spread tick
@@ -47,6 +50,13 @@ public:
 				Quote ask = bid.addTick(bidAskSpreadTick);
 
 				addRow(*it + "," + bid.toString() + "," + ask.toString());
+
+				if (tickSize == noOfTicksInRange)
+					direction = false; 
+				else if (tickSize == 1)
+					direction = true;
+
+				direction ? tickSize++ : tickSize--;
 			};
 		};
 

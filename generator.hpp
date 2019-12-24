@@ -31,7 +31,11 @@ public:
 	}
 
 	void addHeader(string header) { this->file << header << rowdelimiter << "\n"; }
-	void addRow(string row) { this->file << row << rowdelimiter << "\n"; }
+	void addRow(string row) 
+	{ 
+		this->file << row << rowdelimiter << "\n";
+		this->file.flush();
+	}
 
 	string getFileName() { return this->filename; }
 };

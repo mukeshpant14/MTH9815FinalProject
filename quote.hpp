@@ -66,8 +66,9 @@ public:
 
 		if (first > 31)
 		{
+			int temp = first;
 			first = first % 32;
-			base += (int)first / 32;
+			base += (int)temp / 32;
 		};
 
 		return Quote(base, first, second);
