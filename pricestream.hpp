@@ -29,6 +29,15 @@ public:
 
 	// The side on this order
 	PricingSide GetSide() const { return this->side; }
+	string getSideStr() const
+	{
+		switch (this->side)
+		{
+		case PricingSide::BID: return "BID";
+		case PricingSide::OFFER: return "OFFER";
+		default: throw "unrecognized side";
+		}
+	}
 
 	// Get the price on this order
 	double GetPrice() const { return this->price; }
@@ -39,10 +48,10 @@ public:
 	// Get the hidden quantity on this order
 	long GetHiddenQuantity() const { return this->hiddenQuantity; }
 
-	string toString()
+	string toString() const
 	{
-		return "[" + std::to_string(price) + "," + std::to_string(visibleQuantity) + "," + std::to_string(hiddenQuantity)
-			+ "," + std::to_string(side) + "]";
+		return std::to_string(price) + "," + std::to_string(visibleQuantity) + "," + std::to_string(hiddenQuantity)
+			+ "," + this->getSideStr();
 	}
 private:
 	friend class boost::serialization::access;

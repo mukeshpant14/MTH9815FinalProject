@@ -62,6 +62,19 @@ public:
 	InquiryState GetState() const { return this->state; }
 	void setState(InquiryState _state) { this->state = _state; }
 
+	string getStateStr() const
+	{
+		switch (this->state)
+		{
+		case InquiryState::RECEIVED: return "RECEIVED";
+		case InquiryState::DONE: return "DONE";
+		case InquiryState::CUSTOMER_REJECTED: return "CUSTOMER_REJECTED";
+		case InquiryState::QUOTED: return "QUOTED";
+		case InquiryState::REJECTED: return "REJECTED";
+		default: throw "unrecognized inquiry state";
+		}
+	}
+
 	static InquiryState getStateEnum(string stateStr)
 	{
 		//RECEIVED, QUOTED, DONE, REJECTED, CUSTOMER_REJECTED

@@ -25,7 +25,7 @@ public:
 
 	virtual void ExecuteAlgo(OrderBook<T> orderBook) = 0;
 
-private:
+protected:
 	map<string, AlgoExecution<T>> algoExecutionMap;
 };
 
@@ -35,28 +35,36 @@ public:
 	void ExecuteAlgo(OrderBook<Bond> orderBook)
 	{
 		// create a object of algo execution based on the algo using order book
-		Bond const bond = orderBook.GetProduct();
+		Bond bond = orderBook.GetProduct();
 
 		// go over each bid and ask order and check if spread if 1/128
 		vector<AlgoExecution<Bond>> algoExecutionOrders;
 		for (unsigned int i = 0; i < orderBook.GetBidStack().size(); i++)
 		{
 			Order bid = orderBook.GetBidStack().at(i);
-			Order ask = orderBook.GetOfferStack().at(i);
+			Order offer = orderBook.GetOfferStack().at(i);
 
-			if ((ask.GetPrice() - bid.GetPrice()) == 1.0 / 128)
+			if ((offer.GetPrice() - bid.GetPrice()) == 1.0 / 128)
 			{
 				PricingSide side = i % 2 == 0 ? PricingSide::BID : PricingSide::OFFER;
-				ExecutionOrder<Bond> order(bond, side, "orderId_" + bond.GetProductId() + "_" + std::to_string(i), OrderType::LIMIT,
-					(side == PricingSide::BID ? ask.GetPrice() : bid.GetPrice()), bid.GetQuantity(), bid.GetQuantity() * 2, "", false);
+				string parentOrderId = "pOrderId_" + std::to_string(i);
+				long totalQuantity = bid.GetQuantity();
+				long visiableQuantity = (long) (totalQuantity * 1.0 / 3.0);
+				long hiddenQuantity = totalQuantity - visiableQuantity; // take 2/3 (i.e. remaining)
 
-				AlgoExecution<Bond> executionOrder(order, Market::CME);
+				ExecutionOrder<Bond> order(bond, side, "orderId_" + bond.GetProductId() + "_" + std::to_string(i), OrderType::LIMIT,
+					(side == PricingSide::BID ? offer.GetPrice() : bid.GetPrice()), visiableQuantity, hiddenQuantity, parentOrderId, false);
+
+				AlgoExecution<Bond> executionOrder(bond, order, Market::CME, bid, offer);
 				algoExecutionOrders.push_back(executionOrder);
 			}
 		}
 
-		for(auto it = algoExecutionOrders.begin(); it != algoExecutionOrders.end(); ++it)
+		for (auto it = algoExecutionOrders.begin(); it != algoExecutionOrders.end(); ++it)
+		{
+			this->algoExecutionMap[bond.GetProductId()] = *it;
 			this->callListeners(*it, Action::ADD);
+		}
 	}
 
 	static BondAlgoExecutionService* Instance()

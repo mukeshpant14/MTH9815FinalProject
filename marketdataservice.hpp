@@ -34,11 +34,10 @@ public:
 	// The callback that a Connector should invoke for any new or updated data
 	void OnMessage(OrderBook<Bond> &data)
 	{
-		// 
 		string productId = data.GetProduct().GetProductId();
 		if (this->orderBookMap.find(productId) == this->orderBookMap.end()) // not found
 		{
-			this->orderBookMap.emplace(data.GetProduct().GetProductId(), data);
+			this->orderBookMap[productId] = data;
 		}
 		else
 		{
@@ -50,7 +49,7 @@ public:
 			offerStack.insert(offerStack.end(), data.GetOfferStack().begin(), data.GetOfferStack().end());
 
 			OrderBook<Bond> updatedOrderBook(currOrderBook.GetProduct(), bidStack, offerStack);
-			this->orderBookMap.emplace(productId, updatedOrderBook);
+			this->orderBookMap[productId] = updatedOrderBook;
 		}
 
 		this->printMessage("Added order to order book in BondMarketDataService --> " + productId);

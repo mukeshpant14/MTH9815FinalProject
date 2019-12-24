@@ -39,14 +39,13 @@ public:
 	void OnMessage(Trade<T>& data)
 	{
 		this->BookTrade(data);
-
 		this->callListeners(data, Action::ADD);
 	}
 
 	// Book the trade
 	void BookTrade(const Trade<T> &trade)
 	{
-		tradeMap.emplace(trade.GetTradeId(), trade);
+		tradeMap[trade.GetTradeId()] = trade;
 		this->printMessage("Booked trade in TradeBookingService --> " + trade.GetTradeId());
 	}
 

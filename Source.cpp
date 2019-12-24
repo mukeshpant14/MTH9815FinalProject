@@ -139,6 +139,18 @@ void initializeServices()
 	BondRiskHistoricalDataService* bondRiskHistoricalService = new BondRiskHistoricalDataService();
 	HistoricalDataServiceListener<PV01<Bond>> bondRiskHistoricalServiceListener(bondRiskHistoricalService);
 	bondRiskService->AddListener(&bondRiskHistoricalServiceListener);
+	// bond execution
+	BondExecutionHistoricalDataService* bondExecutionHistoricalService = new BondExecutionHistoricalDataService();
+	HistoricalDataServiceListener<ExecutionOrder<Bond>> bondExecutionHistoricalServiceListener(bondExecutionHistoricalService);
+	bondExecutionService->AddListener(&bondExecutionHistoricalServiceListener);
+	// bond streaming 
+	BondStreamingHistoricalDataService* bondStreamingHistoricalDataService = new BondStreamingHistoricalDataService();
+	HistoricalDataServiceListener<PriceStream<Bond>> bondStreamingHistoricalDataServiceListener(bondStreamingHistoricalDataService);
+	bondStreamingService->AddListener(&bondStreamingHistoricalDataServiceListener);
+	// bond inquiry
+	BondInquiryHistoricalDataService* bondInquiryHistoricalDataService = new BondInquiryHistoricalDataService();
+	HistoricalDataServiceListener<Inquiry<Bond>> bondInquiryHistoricalDataServiceListener(bondInquiryHistoricalDataService);
+	bondInquiryService->AddListener(&bondInquiryHistoricalDataServiceListener);
 
 	// invoke subscribe on all connectors 
 	bondDataConnector.Subscribe();

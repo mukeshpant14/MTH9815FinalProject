@@ -25,14 +25,15 @@ public:
 		return listeners;
 	}
 
-	void callListeners(T& data, Action action)
+	void callListeners(T data, Action action)
 	{
 		for (auto it = listeners.begin(); it != listeners.cend(); ++it)
 		{
+			T d(data);
 			if (action == Action::ADD)
-				(*it)->ProcessAdd(data);
+				(*it)->ProcessAdd(d);
 			else if (action == Action::UPDATE)
-				(*it)->ProcessUpdate(data);
+				(*it)->ProcessUpdate(d);
 			else
 				throw "Unsupported action";
 		}

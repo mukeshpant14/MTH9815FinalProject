@@ -46,6 +46,7 @@ public:
 			throw "No publisher set";
 
 		socketPublisher->Publish(priceStream);
+		this->callListeners(priceStream, Action::ADD);
 	}
 
 	static BondStreamingService* Instance()

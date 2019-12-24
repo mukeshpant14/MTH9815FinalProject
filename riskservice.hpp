@@ -87,6 +87,11 @@ public:
 	// Get the name of the bucket
 	const string& GetName() const { return name; }
 
+	string toString() const
+	{
+
+	}
+
 private:
 	vector<T> products;
 	string name;
@@ -127,10 +132,16 @@ public:
 		long quantity = position.GetAggregatePosition();
 		double pv01v = calculatePV01(position.GetProduct());
 		PV01<Bond> pv01(position.GetProduct(), pv01v, quantity);
-		pvMap.emplace(position.GetProduct().GetProductId(), pv01);
+		string productId = position.GetProduct().GetProductId();
+		pvMap[productId] = pv01;
 
 		this->callListeners(pv01, Action::ADD);
-		this->printMessage("Added position in BondRiskService --> " + position.GetProduct().GetProductId());
+		this->printMessage("Added position in BondRiskService --> " + productId);
+	}
+
+	bool dataExists(string productId)
+	{
+		return this->pvMap.find(productId) != this->pvMap.end();
 	}
 
 	PV01<BucketedSector<Bond>>& GetBucketedRisk(const BucketedSector<Bond>& sector) 
@@ -142,9 +153,12 @@ public:
 		for (auto it = products.cbegin(); it != products.cend(); ++it)
 		{
 			string productId = (*it).GetProductId();
-			auto pv01Bond = this->GetData(productId);
-			pv01 += pv01Bond.GetPV01();
-			quantity += pv01Bond.GetQuantity();
+			if (this->dataExists(productId))
+			{
+				auto pv01Bond = this->GetData(productId);
+				pv01 += pv01Bond.GetPV01();
+				quantity += pv01Bond.GetQuantity();
+			}
 		}
 
 		auto pvo1_bucketed = new PV01<BucketedSector<Bond>>(sector, pv01, quantity);

@@ -43,7 +43,7 @@ public:
 			data.setState(InquiryState::DONE);
 		};
 
-		inquiryMap.emplace(data.GetInquiryId(), data);
+		inquiryMap[data.GetInquiryId()] = data;
 		isUpdate ? this->callListeners(data, Action::UPDATE) : this->callListeners(data, Action::ADD);
 	};
 
@@ -101,6 +101,7 @@ public:
 	// Listener callback to process an add event to the Service
 	void ProcessAdd(Inquiry<Bond> &data) 
 	{ 
+
 		if (data.GetState() == InquiryState::RECEIVED)
 		{
 			data.setPrice(100.0); // set quote of 100.0

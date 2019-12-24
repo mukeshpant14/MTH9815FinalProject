@@ -43,6 +43,15 @@ public:
 		bondMap.insert(pair<string, Bond>(data.GetProductId(), data));
 	}
 
+	Bond findProductByTenor(int tenor)
+	{
+		for (auto it = bondMap.begin(); it != bondMap.end(); ++it)
+			if ((*it).second.GetTenor() == tenor)
+				return (*it).second;
+
+		return Bond(); // may be throw
+	}
+
 	/** This function is called to create an instance of the class.
 	Calling the constructor publicly is not allowed. The constructor
 	is private and is only called by this Instance function.

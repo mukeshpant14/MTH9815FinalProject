@@ -22,7 +22,7 @@ class ExecutionOrder
 public:
 	// ctor for an order
 	ExecutionOrder(const T &_product, PricingSide _side, string _orderId, OrderType _orderType, double _price,
-		double _visibleQuantity, double _hiddenQuantity, string _parentOrderId, bool _isChildOrder) : product(_product)
+		long _visibleQuantity, long _hiddenQuantity, string _parentOrderId, bool _isChildOrder) : product(_product)
 	{
 		side = _side;
 		orderId = _orderId;
@@ -61,6 +61,18 @@ public:
 
 	// Get the order type on this order
 	OrderType GetOrderType() const { return this->orderType; }
+	string getOrderTypeStr() const
+	{
+		switch (this->orderType)
+		{
+		case OrderType::FOK: return "FOK";
+		case OrderType::IOC: return "IOC";
+		case OrderType::LIMIT: return "LIMIT";
+		case OrderType::MARKET: return "MARKET";
+		case OrderType::STOP: return "STOP";
+		default: throw "unrecognized order type";
+		}
+	}
 
 	// Get the price on this order
 	double GetPrice() const { return this->price; }
@@ -89,8 +101,8 @@ private:
 	string orderId;
 	OrderType orderType;
 	double price;
-	double visibleQuantity;
-	double hiddenQuantity;
+	long visibleQuantity;
+	long hiddenQuantity;
 	string parentOrderId;
 	bool isChildOrder;
 

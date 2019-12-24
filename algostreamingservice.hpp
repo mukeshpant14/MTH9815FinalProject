@@ -18,6 +18,9 @@ public:
 	// The callback that a Connector should invoke for any new or updated data
 	void OnMessage(AlgoStream<T> &data)
 	{ 
+		string productId = data.getProduct().GetProductId();
+		this->algoStreamMap[productId] = data;
+
 		this->callListeners(data, Action::ADD);
 	}
 
@@ -26,15 +29,20 @@ public:
 
 	void ProcessAlgoExecution(AlgoExecution<T>& data) 
 	{ 
-		ExecutionOrder<T> executionOrder = data.getExecutionOrder();
-		PriceStreamOrder bidOrder(executionOrder.GetPrice(), executionOrder.GetVisibleQuantity(),
-			executionOrder.GetHiddenQuantity(), executionOrder.GetSide());
-		// TODO
-		PriceStreamOrder offerOrder(executionOrder.GetPrice(), executionOrder.GetVisibleQuantity(),
-			executionOrder.GetHiddenQuantity(), executionOrder.GetSide());
+		T product = data.getProduct();
+
+		Order bid = data.getBid();
+		long visibleQuantity = (long) (bid.GetQuantity() * 1.0 / 3.0);
+		long hiddenQuantity = bid.GetQuantity() - visibleQuantity;
+		PriceStreamOrder bidOrder(bid.GetPrice(), visibleQuantity, hiddenQuantity, bid.GetSide());
+		
+		Order offer = data.getOffer();
+		visibleQuantity = (long) (offer.GetQuantity() * 1.0 / 3.0);
+		hiddenQuantity = offer.GetQuantity() - visibleQuantity;
+		PriceStreamOrder offerOrder(offer.GetPrice(), visibleQuantity, hiddenQuantity, offer.GetSide());
 
 		PriceStream<Bond> priceStream(data.getExecutionOrder().GetProduct(), bidOrder, offerOrder);
-		AlgoStream<Bond> algoStream(priceStream);
+		AlgoStream<Bond> algoStream(product, priceStream);
 		this->OnMessage(algoStream);
 	}
 

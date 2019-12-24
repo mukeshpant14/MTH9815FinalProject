@@ -25,7 +25,8 @@ public:
 	{
 		Bond product = data.GetProduct();
 		string productId = product.GetProductId();
-		priceMap.emplace(productId, data);
+
+		priceMap[productId] = data;
 		this->callListeners(data, Action::ADD);
 	}
 
