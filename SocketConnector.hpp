@@ -74,6 +74,7 @@ public:
 	// read data from socket
 	void Subscribe()
 	{
+		std::cout << "Reading records from socket: " << ADDRESS << "," << this->port << std::endl;
 		this->processedRecords = 0;
 		int batch = 1;
 		while (true) {
@@ -101,7 +102,7 @@ public:
 			if ((processedRecords / (500000 * batch)) >= 1)
 			{
 				++batch;
-				std::cout << "Processed : " << processedRecords << " records\n";
+				std::cout << "Processed: " << processedRecords << " records from socket: " << ADDRESS << "," << this->port << std::endl;
 			}
 
 			if (error == boost::asio::error::eof) break;

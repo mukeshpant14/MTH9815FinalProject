@@ -23,7 +23,7 @@ public:
 		securities.push_back("912828YS3");
 		securities.push_back("912810SK5");
 
-		this->generatePriceData(securities, start, end, 2, 10000);
+		this->generatePriceData(securities, start, end, 2, 1000000);
 	}
 	/**
 	* productId id of the product
