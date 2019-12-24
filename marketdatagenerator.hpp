@@ -45,7 +45,6 @@ public:
 					int bidAskSpreadTick = (rand() % 4 + 1) * bidAskSpreadIncrementInTick;
 					Quote ask = bid.addTick(bidAskSpreadTick);
 
-
 					addRow(*it + "," + bid.toString() + "," + ask.toString() + "," + std::to_string(*qit));
 				};
 			};

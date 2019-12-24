@@ -29,13 +29,6 @@ public:
 		this->socket = new tcp::socket(*ioservice);
 	}
 
-	/*virtual ~SocketConnector()
-	{
-		this->close();
-		delete this->socket;
-		std::cout << "Socket Closed on port " << this->port << std::endl;
-	}*/
-
 	void close() { this->socket->close(); }
 
 protected:
@@ -57,9 +50,9 @@ public:
 		tcp::endpoint endpoint(address::from_string(ADDRESS), _port);
 		//tcp::endpoint endpoint(tcp::v4(), _port);
 		tcp::acceptor acceptor(*this->ioservice, endpoint);
-		std::cout << "[Client] Trying to accept connection " << this->port << std::endl;
+		std::cout << "[SubscribeSocketConnector] Trying to accept connection " << this->port << std::endl;
 		acceptor.accept(*this->socket);
-		std::cout << "[Client] Connection successful. Socket: " << ADDRESS << "," << _port << std::endl;
+		std::cout << "[SubscribeSocketConnector] Connection successful. Socket: " << ADDRESS << "," << _port << std::endl;
 	}
 
 	/*~SubscribeSocketConnector() {}
@@ -74,7 +67,7 @@ public:
 	// read data from socket
 	void Subscribe()
 	{
-		std::cout << "Reading records from socket: " << ADDRESS << "," << this->port << std::endl;
+		std::cout << "[SubscribeSocketConnector] Reading records from socket: " << ADDRESS << "," << this->port << std::endl;
 		this->processedRecords = 0;
 		int batch = 1;
 		while (true) {
@@ -102,13 +95,13 @@ public:
 			if ((processedRecords / (500000 * batch)) >= 1)
 			{
 				++batch;
-				std::cout << "Processed: " << processedRecords << " records from socket: " << ADDRESS << "," << this->port << std::endl;
+				std::cout << "[SubscribeSocketConnector] Processed: " << processedRecords << " records from socket: " << ADDRESS << "," << this->port << std::endl;
 			}
 
 			if (error == boost::asio::error::eof) break;
 			if (error) 
 			{
-				std::cout << "Status: " << error.message() << std::endl;
+				std::cout << "[SubscribeSocketConnector] Status: " << error.message() << std::endl;
 				break;
 			};
 		};
@@ -130,9 +123,9 @@ public:
 	{
 		tcp::endpoint endpoint(address::from_string(ADDRESS), this->port);
 		//tcp::endpoint endpoint(tcp::v4(), this->port);
-		std::cout << "[Server] Trying to connect " << this->port << std::endl;
+		std::cout << "[PublishSocketConnector] Trying to connect " << this->port << std::endl;
 		this->socket->connect(endpoint);
-		std::cout << "[Server] Connection established" << this->port << std::endl;
+		std::cout << "[PublishSocketConnector] Connection established" << this->port << std::endl;
 	}
 
 	void Subscribe() { /*no op */}  // may be throw?
